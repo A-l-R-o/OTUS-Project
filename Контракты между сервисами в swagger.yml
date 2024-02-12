@@ -1,0 +1,418 @@
+openapi: 3.0.0
+info:
+  title: Система по поиску отелей и бронированию номеров
+  version: "1.0"
+  description: Описание запросов до WebsiteAPIBackend и до микросервисов
+tags:
+  - name: от Frontend до WebsiteAPIBackend
+    description: запросы от пользовательского интерфейса до бэка
+  - name: от WebsiteAPIBackend до микросервисов
+    description: запросы от бэка до микросервисов
+  - name: Notification
+    description: запрос на отправку сообщений о бронировании
+servers:
+  - url: 'https://testhotel.ru'
+paths:
+  /api/v2/backend/search/hotels:
+    get:
+      tags:
+        - от Frontend до WebsiteAPIBackend
+      summary: Поиск доступных отелей согласно введённым данным
+      parameters:
+        - name: city
+          in: query
+          description: Город где необходимо произвести поиск
+          required: true
+          schema:
+            type: string
+        - name: checkInDate
+          in: query
+          description: Дата заезда
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: checkOutDate
+          in: query
+          description: Дата выезда
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: guests
+          in: query
+          description: Колиечство гостей
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Список доступных отелей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hotel'
+  /api/v2/backend/hotels/{hotelId}:
+    get:
+      tags:
+        - от Frontend до WebsiteAPIBackend
+      summary: Получение информации об отеле
+      parameters:
+        - name: hotelId
+          in: path
+          description: идентификатор отеля
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Детальная информация об отеле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDetails'
+  /api/v2/backend/bookings:
+    post:
+      tags:
+        - от Frontend до WebsiteAPIBackend
+      summary: Бронирование номера в выбранном отеле
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        200:
+          description: Информация о созданном бронировании
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+  /api/v2/backend/payments:
+    post:
+      tags:
+        - от Frontend до WebsiteAPIBackend
+      summary: Оплата забронированного номера
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        200:
+          description: Статус оплаты
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+  /api/v2/backend/users/auth:
+    post:
+      tags:
+        - от Frontend до WebsiteAPIBackend
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: логин пользователя
+                password:
+                  type: string
+                  description: пароль пользователя
+      responses:
+        200:
+          description: токен авторизации
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+  /api/v1/search/hotels:
+    get:
+      tags:
+        - от WebsiteAPIBackend до микросервисов
+      summary: Поиск доступных отелей согласно введённым данным
+      parameters:
+        - name: city
+          in: query
+          description: Город где необходимо произвести поиск
+          required: true
+          schema:
+            type: string
+        - name: checkInDate
+          in: query
+          description: Дата заезда
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: checkOutDate
+          in: query
+          description: Дата выезда
+          required: true
+          schema:
+            type: string
+            format: date
+        - name: guests
+          in: query
+          description: Колиечство гостей
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Список доступных отелей
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Hotel'
+  /api/v1/hotels/{hotelId}:
+    get:
+      tags:
+        - от WebsiteAPIBackend до микросервисов
+      summary: Получение информации об отеле
+      parameters:
+        - name: hotelId
+          in: path
+          description: идентификатор отеля
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: Детальная информация об отеле
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelDetails'
+  /api/v1/bookings:
+    post:
+      tags:
+        - от WebsiteAPIBackend до микросервисов
+      summary: Бронирование номера в выбранном отеле
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        200:
+          description: Информация о созданном бронировании
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookingResponse'
+  /api/v1/payments:
+    post:
+      tags:
+        - от WebsiteAPIBackend до микросервисов
+      summary: Оплата забронированного номера
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRequest'
+      responses:
+        200:
+          description: Статус оплаты
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentResponse'
+  /api/v1/users/auth:
+    post:
+      tags:
+        - от WebsiteAPIBackend до микросервисов
+      summary: Авторизация пользователя
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: логин пользователя
+                password:
+                  type: string
+                  description: пароль пользователя
+      responses:
+        200:
+          description: токен авторизации
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+      
+  /api/v1//notifications:
+    post:
+      tags:
+        - Notification
+      summary: отправко сообщений о статусе бронирования
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NotificationsRequest"
+      responses:
+        200:
+          description: статус отправки уведомления
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationsResponse'
+  
+components:
+  schemas:
+    Hotel:
+      type: object
+      properties:
+        id:
+          type: string
+          description: идентификатор отеля
+        name:
+          type: string
+          description: наименование отеля
+        location:
+          type: string
+          description: адрес отеля
+    HotelDetails:
+      type: object
+      properties:
+        id:
+          type: string
+          description: идентификатор отеля
+        name:
+          type: string
+          description: наименование отеля
+        specification:
+          type: string
+          description: описание отеля
+        rooms:
+           type: array
+           description: список доступных номеров
+           items:
+            type: string
+        images:
+          type: array
+          description: фото отеля
+          items:
+            type: string
+        amenities:
+          type: array
+          description: удобства предоставляемые отелем
+          items:
+            type: string
+    BookingRequest:
+      type: object
+      properties:
+        userId:
+          type: string
+          description: идентификатор пользователя
+        hotelId:
+          type: string
+          description: идентификатор отеля
+        roomId:
+          type: string
+          description: идентификатор выбранного номера
+        checkInDate:
+          type: string
+          description: дата заезда
+          format: date
+          example: 05-03-2024
+        checkOutDate:
+          type: string
+          description: дата выезда
+          format: date
+          example: 15-03-2024
+        guestInfo:
+          type: object
+          description: информация о гостях
+          properties:
+            name:
+              type: string
+            phone:
+              type: integer
+              example: 89990000000
+    BookingResponse:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          description: идентификатор бронирования
+        status:
+          type: string
+          description: статус бронирования
+        costs:
+          type: integer
+          description: стоимость номера
+          example: 5000
+    PaymentRequest:
+      type: object
+      properties:
+        bookingId:
+          type: string
+          description: идентификатор бронирования
+        paymentDetails:
+          type: object
+          description: информация о платежных данных и сумме оплаты
+          properties:
+            cardNumber:
+              type: string
+            cardExpiry:
+              type: string
+            cardCVV:
+              type: string
+            costs:
+              type: integer
+              example: 5000
+    PaymentResponse:
+      type: object
+      properties:
+        paymentId:
+          type: string
+          description: идентификатор оплаты
+        status:
+          type: string
+    NotificationsRequest:
+      type: object
+      properties:
+       userId:
+        type: string
+        description: Идентификатор пользователя, которому отправляется уведомление
+       message:
+        type: string
+        description: Текст уведомления для пользователя
+       type:
+        type: string
+        enum: [email, SMS, push]
+        description: Тип уведомления, например email, SMS, или push
+        required:
+         - userId
+         - message
+         - type
+    NotificationsResponse:
+      type: object
+      properties:
+        status:
+         type: string
+         description: успешная отправка уведомления
