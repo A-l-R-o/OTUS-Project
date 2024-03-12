@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: health-redirect-ingress # Уникальное имя сервиса в пределах namespace
+  annotations:
+    nginx.ingress.kubernetes.io/permanent-redirect: "http://arch.homework/health/" # целевой URL на который будет происходить перенаправление
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: arch.homework # URL с которого будет происходить перенаправление
+    http:
+      paths:
+      - path: /otusapp/aromashkin/health/ # путь с которого будет происходить перенаправление
+        pathType: Prefix
+        backend:
+          service:
+            name: health-service # наименование должно точно совпадать с наименованием metadata.name в манифесте Service
+            port:
+              number: 8000 # порт для сервиса

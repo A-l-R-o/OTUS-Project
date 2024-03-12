@@ -1,0 +1,17 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: health-ingress # Уникальное имя сервиса в пределах namespace
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: arch.homework # url на который переходим
+    http:
+      paths:
+      - path: /health/ # конкретный путь для обработки. Соответствует значению GetMapping("/health/") в сервисе на SpringBoot
+        pathType: Prefix
+        backend:
+          service:
+            name: health-service # наименование сервиса куда направляем, должно точно совпадать с наименованием metadata.name в манифесте Service
+            port:
+              number: 8000 # порт для сервиса

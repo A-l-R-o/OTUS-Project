@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: health-deployment # Уникальное имя сервиса в пределах namespace
+spec:
+  replicas: 2 # количесвто реплик
+  selector:
+    matchLabels:
+      app: health-test
+  template:
+    metadata:
+      labels:
+        app: health-test
+    spec:
+      containers:
+      - name: health-otus # имя контейнера в Docker
+        image: 1alro1/otus_project:otus # путь до образа Docker
+        ports:
+        - containerPort: 8000 # Порт микросервиса

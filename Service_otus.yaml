@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: health-service # Уникальное имя сервиса в пределах namespace
+spec:
+  selector:
+    app: health-test # Селектор, определяющий, какие поды включать в сервис
+  ports:
+  - protocol: TCP # Протокол, используемый сервисом (TCP/UDP)
+    port: 8000 # Порт на который принимается трафик
+    targetPort: 8000 # Порт на который направляет трафик
+  type: NodePort
