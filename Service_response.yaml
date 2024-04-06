@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: response-service # Уникальное имя сервиса в пределах namespace
+spec:
+  selector:
+    app: response # Селектор, определяющий, какие поды включать в сервис согласно метке app в манифесте Deployment
+  ports:
+  - protocol: TCP # Протокол, используемый сервисом (TCP/UDP)
+    port: 5435 # Порт на который принимается трафик внутри кластера k8s
+    targetPort: 8080 # Порт на который направляется трафик для приложения
+    nodePort: 30876 # Порт на который принимается трафик снаружи кластера k8s
+  type: NodePort

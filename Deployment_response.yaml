@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: response-deployment # Уникальное имя сервиса в пределах namespace
+spec:
+  replicas: 1 # количесвто реплик
+  selector:
+    matchLabels:
+      app: response
+  template:
+    metadata:
+      labels:
+        app: response
+    spec:
+      containers:
+      - name: response-otus # имя контейнера в Docker
+        image: 1alro1/otus_project:response # путь до образа Docker

@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: response-ingress # Уникальное имя сервиса в пределах namespace
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / # аннотация применяемся для корректного перенаправления
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: arch.homework # url на который направляем запрос
+    http:
+      paths:
+      - path: /user
+        pathType: Prefix
+        backend:
+          service:
+            name: response-service
+            port:
+              number: 30876 # порт на который ingress направляет трафик

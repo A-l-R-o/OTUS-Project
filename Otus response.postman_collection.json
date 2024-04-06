@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "558f0d59-07c5-4a4a-b711-f1b7f4d73bff",
+		"name": "Otus response",
+		"description": "Коллеция позволяющая проверить работоспособность запросов до БД в k8s",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34108675"
+	},
+	"item": [
+		{
+			"name": "DELETE otusUser",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://arch.homework:30876/user/otusUser",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"port": "30876",
+					"path": [
+						"user",
+						"otusUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT otusUser",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"otusReal\",\n    \"phone\": \"89161111111\"\n}"
+				},
+				"url": {
+					"raw": "http://arch.homework:30876/user/otusUser",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"port": "30876",
+					"path": [
+						"user",
+						"otusUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET otusUser",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://arch.homework:30876/user/otusUser",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"port": "30876",
+					"path": [
+						"user",
+						"otusUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST otusUser",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"login\": \"otusUser\",\n  \"name\": \"otus\",\n  \"phone\": \"89990000000\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://arch.homework:30876/user",
+					"protocol": "http",
+					"host": [
+						"arch",
+						"homework"
+					],
+					"port": "30876",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

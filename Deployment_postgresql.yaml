@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgresql-deployment # Уникальное имя сервиса в пределах namespace
+spec:
+  replicas: 1 # количесвто реплик
+  selector:
+    matchLabels:
+      app: postgresql
+  template:
+    metadata:
+      labels:
+        app: postgresql
+    spec:
+      containers:
+      - name: postgresql-otus # имя контейнера в Docker
+        image: 1alro1/otus_project:postgresql # путь до образа Docker
+        env:
+        - name: POSTGRES_DB
+          valueFrom:
+            secretKeyRef:
+              name: postgresql-secrets
+              key: POSTGRES_DB
+        - name: POSTGRES_USER
+          valueFrom: # указывает на то к манифесту с каким именем нужно обратиться для получения имени пользователя
+            secretKeyRef: 
+              name: postgresql-secrets
+              key: POSTGRES_USER
+        - name: POSTGRES_PASSWORD
+          valueFrom: # указывает на то к манифесту с каким именем нужно обратиться для получения пароля пользователя
+            secretKeyRef:
+              name: postgresql-secrets
+              key: POSTGRES_PASSWORD
+        volumeMounts:
+        - name: postgresql-configmap
+          mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: postgresql-configmap
+          configMap:
+            name: postgresql-configmap
